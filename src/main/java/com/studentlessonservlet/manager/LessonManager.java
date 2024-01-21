@@ -9,6 +9,7 @@ import java.util.List;
 
 public class LessonManager {
     Connection connection = DBConnectionProvider.getInstance().getConnection();
+    private UserManager userManager = new UserManager();
 
     public List<Lesson> getLessons() {
         String sql = "SELECT * FROM lesson";
@@ -23,6 +24,7 @@ public class LessonManager {
                         .duration(resultSet.getInt("duration"))
                         .lecturerName(resultSet.getString("lecturer_name"))
                         .price(resultSet.getDouble("price"))
+                        .user(userManager.getUserByID(resultSet.getInt("user_id")))
                         .build());
             }
         } catch (SQLException e) {
@@ -43,6 +45,7 @@ public class LessonManager {
                         .name(resultSet.getString("name"))
                         .duration(resultSet.getInt("duration"))
                         .lecturerName(resultSet.getString("lecturer_name"))
+                        .user(userManager.getUserByID(resultSet.getInt("user_id")))
                         .build();
             }
         } catch (SQLException e) {

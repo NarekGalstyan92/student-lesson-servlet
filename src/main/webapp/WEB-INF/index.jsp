@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Home page</title>
+    <title>Login</title>
     <style>
 
         .button {
@@ -29,11 +29,26 @@
     </style>
 </head>
 <body>
+<% if (session.getAttribute("msg") != null) {%>
+<span style="color: red"> <%=session.getAttribute("msg")%></span>
+<%session.removeAttribute("msg");%>
+<%}%>
 
-<div style="display: flex; justify-content: center;">
-    <a href="/lessons" class="button">Lessons</a>
-    <a href="/students" class="button">Students</a>
-</div>
+<form action="/login" method="post">
+    Email: <input type="email" name="email"> <br>
+    Password: <input type="password" name="password"> <br>
+    <input type="submit" value="login">
+</form>
+<br>
+<br>
+<br>
+<form action="/register" method="post">
+    Name: <input type="text" name="name"> <br>
+    Surname: <input type="text" name="surname"> <br>
+    Email: <input type="email" name="email"> <br>
+    Password: <input type="password" name="password"> <br>
+    <input type="submit" value="register">
+</form>
 
 </body>
 </html>
