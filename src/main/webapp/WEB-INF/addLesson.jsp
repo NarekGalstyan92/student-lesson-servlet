@@ -9,6 +9,7 @@
 <html>
 <head>
     <title>Add Lesson</title>
+    <%String message = (String) request.getAttribute("lessonExist");%>
     <style>
 
         body {
@@ -61,6 +62,9 @@
 <body>
 <h1 style="font-weight: bold; text-align: center;">Add a lessons</h1>
 <form method="post" action="/addLesson">
+    <%if (message != null) {%>
+    <span style="color: red"><%=message%></span> <br>
+    <%}%>
     Lesson name: <input type="text" name="lessonName"> <br>
     Lesson duration: <input type="text" name="lessonDuration"> <br>
     Lecturer name: <input type="text" name="lecturerName"> <br>

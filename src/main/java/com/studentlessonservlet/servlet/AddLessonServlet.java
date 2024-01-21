@@ -2,6 +2,7 @@ package com.studentlessonservlet.servlet;
 
 import com.studentlessonservlet.manager.LessonManager;
 import com.studentlessonservlet.model.Lesson;
+import com.studentlessonservlet.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,12 +27,23 @@ public class AddLessonServlet extends HttpServlet {
         int lessonDuration = Integer.parseInt(req.getParameter("lessonDuration"));
         String lecturerName = req.getParameter("lecturerName");
         Double price = Double.parseDouble(req.getParameter("lessonPrice"));
-        lessonManager.add(Lesson.builder()
-                .name(lessonName)
-                .duration(lessonDuration)
-                .lecturerName(lecturerName)
-                .price(price)
-                .build());
-        resp.sendRedirect("/lessons");
+
+        Lesson lessonByLessonName = lessonManager.getLessonByLessonName(lessonName);
+        String message = null;
+        if (lessonByLessonName.getName() != null && lessonByLessonName.getName().equalsIgnoreCase(lessonName)) {
+            message = "Lesson already exist";
+            req.setAttribute("lessonExist", message);
+            req.getRequestDispatcher("/WEB-INF/addLesson.jsp").forward(req, resp);
+        } else {
+            User user = (User) req.getSession().getAttribute("user");
+            lessonManager.add(Lesson.builder()
+                    .name(lessonName)
+                    .duration(lessonDuration)
+                    .lecturerFullName(lecturerName)
+                    .price(price)
+                    .user(user)
+                    .build());
+            resp.sendRedirect("/lessons");
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.studentlessonservlet.servlet;
 
 import com.studentlessonservlet.manager.StudentManager;
 import com.studentlessonservlet.model.Student;
+import com.studentlessonservlet.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +19,8 @@ public class StudentsServlet extends HttpServlet {
     private StudentManager studentManager = new StudentManager();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Student> students = studentManager.getAll();
+        User user = (User) req.getSession().getAttribute("user");
+        List<Student> students = studentManager.getStudentByUserId(user.getId());
         req.setAttribute("students",students);
 
        req.getRequestDispatcher("/WEB-INF/students.jsp").forward(req, resp);

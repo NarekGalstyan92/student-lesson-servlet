@@ -59,7 +59,7 @@ public class UserManager {
         return null;
     }
 
-    public User getUserByID(int id) {
+    public User getUserById(int id) {
         String sql = "SELECT * FROM user WHERE id = " + id;
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(sql);

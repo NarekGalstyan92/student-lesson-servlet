@@ -35,7 +35,7 @@ public class UpdateLessonServlet extends HttpServlet {
                 .id(id)
                 .name(lessonName)
                 .duration(lessonDuration)
-                .lecturerName(lecturerName)
+                .lecturerFullName(lecturerName)
                 .price(price)
                 .build());
         resp.sendRedirect("/lessons");

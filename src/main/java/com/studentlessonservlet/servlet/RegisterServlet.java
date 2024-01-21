@@ -30,6 +30,11 @@ public class RegisterServlet extends HttpServlet {
                 .build());
 
         req.getSession().setAttribute("msg", "User registered");
-        resp.sendRedirect("/");
+        resp.sendRedirect("/login");
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/register.jsp").forward(req,resp);
     }
 }

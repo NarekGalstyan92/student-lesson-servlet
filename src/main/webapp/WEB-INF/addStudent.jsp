@@ -1,9 +1,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.studentlessonservlet.model.Lesson" %>
+<%@ page import="com.studentlessonservlet.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Add Student</title>
+    <%String message = (String) request.getAttribute("studentExist");%>
     <style>
 
         body {
@@ -73,6 +75,9 @@
     <h2>Add Student</h2>
 
     <form method="post" action="/addStudent" class="student-form" enctype="multipart/form-data">
+        <%if (message != null) {%>
+        <span style="color: red"><%=message%></span> <br>
+        <%}%>
         <label for="name">Name:</label>
         <input type="text" name="name" id="name" required>
 
@@ -87,11 +92,12 @@
 
         <label for="lessonId">Select Lesson:</label>
         <select name="lessonId" id="lessonId" required>
-            <%
-                for (Lesson lesson : lessons) { %>
+            <% for (Lesson lesson : lessons) { %>
             <option value="<%=lesson.getId()%>"><%=lesson.getName()%></option>
             <% } %>
         </select>
+        <%User user = (User) request.getSession().getAttribute("user");%>
+        <input type="hidden" name="userId" value="<%=user.getId()%>">
         <input type="file" name="avatar" accept="image/jpeg">
         <button type="submit">Add Student</button>
     </form>

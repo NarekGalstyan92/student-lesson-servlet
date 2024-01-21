@@ -13,7 +13,7 @@ public class Lesson {
     private int id;
     private String name;
     private int duration;
-    private String lecturerName;
+    private String lecturerFullName;
     private Double price;
     private User user;
 }

@@ -22,9 +22,9 @@ public class LessonManager {
                         .id(resultSet.getInt("id"))
                         .name(resultSet.getString("name"))
                         .duration(resultSet.getInt("duration"))
-                        .lecturerName(resultSet.getString("lecturer_name"))
+                        .lecturerFullName(resultSet.getString("lecturer_name"))
                         .price(resultSet.getDouble("price"))
-                        .user(userManager.getUserByID(resultSet.getInt("user_id")))
+                        .user(userManager.getUserById(resultSet.getInt("user_id")))
                         .build());
             }
         } catch (SQLException e) {
@@ -44,8 +44,8 @@ public class LessonManager {
                         .id(resultSet.getInt("id"))
                         .name(resultSet.getString("name"))
                         .duration(resultSet.getInt("duration"))
-                        .lecturerName(resultSet.getString("lecturer_name"))
-                        .user(userManager.getUserByID(resultSet.getInt("user_id")))
+                        .lecturerFullName(resultSet.getString("lecturer_name"))
+                        .user(userManager.getUserById(resultSet.getInt("user_id")))
                         .build();
             }
         } catch (SQLException e) {
@@ -59,7 +59,7 @@ public class LessonManager {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, lesson.getName());
             preparedStatement.setInt(2, lesson.getDuration());
-            preparedStatement.setString(3, lesson.getLecturerName());
+            preparedStatement.setString(3, lesson.getLecturerFullName());
             preparedStatement.setDouble(4, lesson.getPrice());
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
@@ -86,7 +86,7 @@ public class LessonManager {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, lesson.getName());
             preparedStatement.setInt(2, lesson.getDuration());
-            preparedStatement.setString(3, lesson.getLecturerName());
+            preparedStatement.setString(3, lesson.getLecturerFullName());
             preparedStatement.setDouble(4, lesson.getPrice());
             preparedStatement.setInt(5, lesson.getId());
             preparedStatement.executeUpdate();
@@ -94,5 +94,52 @@ public class LessonManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Lesson getLessonByLessonName(String lessonName) {
+        String sql = "SELECT * FROM lesson WHERE name = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, lessonName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return Lesson.builder()
+                        .id(resultSet.getInt("id"))
+                        .name(resultSet.getString("name"))
+                        .duration(resultSet.getInt("duration"))
+                        .lecturerFullName(resultSet.getString("lecturer_name"))
+                        .user(userManager.getUserById(resultSet.getInt("user_id")))
+                        .build();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public List<Lesson> getLessonByUserId(int id) {
+        String sql = "SELECT * FROM lesson WHERE user_id = ?";
+        List<Lesson> lessons = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                lessons.add(Lesson.builder()
+                        .id(resultSet.getInt("id"))
+                        .name(resultSet.getString("name"))
+                        .duration(resultSet.getInt("duration"))
+                        .lecturerFullName(resultSet.getString("lecturer_name"))
+                        .price(resultSet.getDouble("price"))
+                        .user(userManager.getUserById(resultSet.getInt("user_id")))
+                        .build());
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lessons;
     }
 }

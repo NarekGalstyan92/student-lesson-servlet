@@ -1,5 +1,6 @@
 <%@ page import="com.studentlessonservlet.model.Lesson" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.studentlessonservlet.manager.LessonManager" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -94,12 +95,13 @@
     <tr>
         <td><a href="/singleLesson?id=<%= lesson.getId() %>"><%= lesson.getName() %></a></td>
         <td><%= lesson.getDuration() %></td>
-        <td><%= lesson.getLecturerName() %></td>
         <td>
             <% if (lesson.getUser() != null) { %>
             <%= lesson.getUser().getName() + " " + lesson.getUser().getSurname() %>
             <% }%>
         </td>
+        <td><%= lesson.getLecturerFullName()%></td>
+
         <td><%= lesson.getPrice() %></td>
         <td class="navigation"> <a href="/deleteLesson?id=<%=lesson.getId()%>" class="button">delete</a> </td>
         <td class="navigation"> <a href="/updateLesson?id=<%=lesson.getId()%>" class="button">update</a> </td>

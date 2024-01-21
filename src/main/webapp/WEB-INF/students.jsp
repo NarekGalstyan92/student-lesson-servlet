@@ -1,8 +1,10 @@
 <%@ page import="com.studentlessonservlet.model.Student" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.studentlessonservlet.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <title>Students</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -123,12 +125,12 @@
             <th>Email</th>
             <th>Student Age</th>
             <th>Lesson Name</th>
+            <th>Added by</th>
             <th>Delete</th>
         </tr>
         </thead>
         <tbody>
-        <%
-            for (Student student : students) { %>
+        <% for (Student student : students) { %>
         <tr>
             <td><%=student.getId()%></td>
             <td><% if (student.getPicName() != null) { %>
@@ -142,6 +144,8 @@
             <td><%=student.getEmail()%></td>
             <td><%=student.getAge()%></td>
             <td><%=student.getLesson().getName()%></td>
+
+            <td><%=student.getUser().getName() + " " + student.getUser().getSurname()%></td>
             <td><a href="/deleteStudent?id=<%=student.getId()%>" class="delete-button">delete</a></td>
         </tr>
         <% }

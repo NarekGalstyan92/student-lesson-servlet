@@ -82,7 +82,7 @@
         <input type="number" name="lessonDuration" id="lessonDuration" value="<%=lesson.getDuration()%>">
         <br>
         <label for="lecturerName">Lecturer name:</label>
-        <input type="text" name="lecturerName" id="lecturerName" value="<%=lesson.getLecturerName()%>">
+        <input type="text" name="lecturerName" id="lecturerName" value="<%=lesson.getLecturerFullName()%>">
         <br>
         <label for="price">Lesson price:</label>
         <input type="number" name="price" id="price" value="<%=lesson.getPrice()%>">

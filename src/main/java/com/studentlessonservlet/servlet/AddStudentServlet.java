@@ -2,6 +2,7 @@ package com.studentlessonservlet.servlet;
 
 import com.studentlessonservlet.manager.LessonManager;
 import com.studentlessonservlet.manager.StudentManager;
+import com.studentlessonservlet.manager.UserManager;
 import com.studentlessonservlet.model.Lesson;
 import com.studentlessonservlet.model.Student;
 
@@ -26,6 +27,7 @@ public class AddStudentServlet extends HttpServlet {
 
     private LessonManager lessonManager = new LessonManager();
     private StudentManager studentManager = new StudentManager();
+    private UserManager userManager = new UserManager();
     private final String UPLOAD_DIRECTORY = "/Users/narekgalstyan/Documents/IdeaProjects/student-lesson-servlet/uploadDirectory";
 
 
@@ -43,6 +45,7 @@ public class AddStudentServlet extends HttpServlet {
         String studentEmail = req.getParameter("email");
         int studentAge = Integer.parseInt(req.getParameter("age"));
         int lessonId = Integer.parseInt(req.getParameter("lessonId"));
+        int userId = Integer.parseInt(req.getParameter("userId"));
 
         Part picture = req.getPart("avatar");
         String pictureName = null;
@@ -51,15 +54,25 @@ public class AddStudentServlet extends HttpServlet {
             picture.write(UPLOAD_DIRECTORY + File.separator + pictureName);
 
         }
+        String msg = null;
+        Student studentByEmail = studentManager.getStudentByEmail(studentEmail);
+        if (studentByEmail != null && studentByEmail.getEmail().equalsIgnoreCase(studentEmail)) {
+            msg = "Student with provided email already exist";
+            req.setAttribute("studentExist", msg);
+            req.setAttribute("lessons", lessonManager.getLessons());
+            req.getRequestDispatcher("/WEB-INF/addStudent.jsp").forward(req, resp);
 
-        studentManager.add(Student.builder()
-                .name(studentName)
-                .surname(studentSurname)
-                .email(studentEmail)
-                .age(studentAge)
-                .lesson(lessonManager.getLessonById(lessonId))
-                .picName(pictureName)
-                .build());
-        resp.sendRedirect("/students");
+        } else {
+            studentManager.add(Student.builder()
+                    .name(studentName)
+                    .surname(studentSurname)
+                    .email(studentEmail)
+                    .age(studentAge)
+                    .lesson(lessonManager.getLessonById(lessonId))
+                    .picName(pictureName)
+                    .user(userManager.getUserById(userId))
+                    .build());
+            resp.sendRedirect("/students");
+        }
     }
 }
